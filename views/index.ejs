@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home</title>
+  <link rel="stylesheet" href="/css/index.css">
+</head>
+<body>
+  
+  <form action="/create-meeting" method="POST">
+    <button type="submit">Create a Meeting</button>
+  </form>
+
+  <h3>Or join an existing meeting:</h3>
+  <form action="/join-meeting" method="POST">
+    <input type="text" name="meetingId" placeholder="Enter Meeting ID" required>
+    <button type="submit">Join a Meeting</button>
+  </form>
+</body>
+</html>

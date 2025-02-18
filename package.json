@@ -1,0 +1,29 @@
+{
+  "name": "collaboboard",
+  "version": "1.0.0",
+  "description": "CollaboBoard is a cloud-based, real-time collaborative whiteboard application built with Node.js and WebRTC. It allows teams to draw, annotate, and communicate via audio in real time, enabling seamless collaboration.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "WhiteBoard"
+  ],
+  "author": "Harsh",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^16.4.7",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "http": "^0.0.1-security",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.10.1",
+    "socket.io": "^4.8.1",
+    "uuid": "^11.0.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}

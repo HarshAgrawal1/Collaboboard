@@ -1,0 +1,95 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+/* Body Styling */
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background: linear-gradient(to right, #667eea, #764ba2);
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+/* Forms */
+form {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin: 10px 0;
+    width: 100%;
+    max-width: 400px;
+}
+
+/* Headings */
+h3 {
+    font-size: 20px;
+    margin: 15px 0;
+    font-weight: bold;
+}
+
+/* Input Field */
+input[type="text"] {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    outline: none;
+}
+
+/* Buttons */
+button {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+button[type="submit"] {
+    background-color: #ff9800;
+    color: white;
+}
+
+button[type="submit"]:hover {
+    background-color: #e68900;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    form {
+        width: 90%;
+    }
+
+    h3 {
+        font-size: 18px;
+    }
+
+    input[type="text"], button {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 400px) {
+    h3 {
+        font-size: 16px;
+    }
+
+    input[type="text"], button {
+        font-size: 12px;
+    }
+}

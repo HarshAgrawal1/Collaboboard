@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meeting Space</title>
+  <link rel="stylesheet" href="/css/meeting.css">
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const socket = io();  
+
+      const meetingId = "<%= meetingId %>";  
+      const isAdmin = "<%= isAdmin %>";  
+
+      socket.emit('joinMeeting', meetingId);
+
+      // Canvas setup
+      const canvas = document.getElementById('canvas');
+      const ctx = canvas.getContext('2d');  
+      let drawing = false;
+      let color = '#000000';
+      let lineWidth = 2;
+
+      ctx.strokeStyle = color;
+      ctx.lineWidth = lineWidth;
+      ctx.lineCap = 'round';
+
+      // Load previous drawings for new participants
+      socket.on('loadCanvas', (savedDrawings) => {
+        savedDrawings.forEach((data) => {
+          if (data.action === 'start') {
+            ctx.beginPath();
+            ctx.moveTo(data.x, data.y);
+          } else if (data.action === 'draw') {
+            ctx.lineTo(data.x, data.y);
+            ctx.stroke();
+          }
+        });
+      });
+
+      if (isAdmin == "true") {
+        // Drawing for Admin
+        canvas.addEventListener('mousedown', (e) => {
+          drawing = true;
+          ctx.beginPath();
+          ctx.moveTo(e.offsetX, e.offsetY);
+          socket.emit('draw', {
+            meetingId,
+            x: e.offsetX,
+            y: e.offsetY,
+            color,
+            lineWidth,
+            action: 'start',
+          });
+        });
+
+        canvas.addEventListener('mousemove', (e) => {
+          if (drawing) {
+            ctx.lineTo(e.offsetX, e.offsetY);
+            ctx.stroke();
+            socket.emit('draw', {
+              meetingId,
+              x: e.offsetX,
+              y: e.offsetY,
+              color,
+              lineWidth,
+              action: 'draw',
+            });
+          }
+        });
+
+        canvas.addEventListener('mouseup', () => {
+          drawing = false;
+        });
+
+        // Receive Draw Events from Server
+        socket.on('draw', (data) => {
+          if (data.action === 'start') {
+            ctx.beginPath();
+            ctx.moveTo(data.x, data.y);
+          } else if (data.action === 'draw') {
+            ctx.lineTo(data.x, data.y);
+            ctx.stroke();
+          }
+        });
+        document.getElementById('colorPicker')?.addEventListener('input', (e) => {
+        color = e.target.value;
+        ctx.strokeStyle = color;
+        socket.emit('colorChange', { meetingId, color });
+      });
+
+      // **Emit Line Width Change**
+      document.getElementById('lineWidth')?.addEventListener('input', (e) => {
+        lineWidth = e.target.value;
+        ctx.lineWidth = lineWidth;
+        socket.emit('lineWidthChange', { meetingId, lineWidth });
+      });
+
+      document.getElementById('clearButton')?.addEventListener('click', () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        socket.emit('clearCanvas', meetingId);
+      });
+
+
+        // End Meeting Button
+        document.getElementById('endButton').addEventListener('click', () => {
+        if (confirm("Are you sure you want to end the meeting?")) {
+          socket.emit('endMeeting', meetingId);  // 🔥 Send event to server
+        }
+      });
+
+      } else {
+        // Disable canvas for participants
+        canvas.style.pointerEvents = 'none';
+      }
+
+      // Listen for draw events for all users
+      socket.on('draw', (data) => {
+        ctx.strokeStyle = data.color;
+        ctx.lineWidth = data.lineWidth;
+        if (data.action === 'start') {
+          ctx.beginPath();
+          ctx.moveTo(data.x, data.y);
+        } else if (data.action === 'draw') {
+          ctx.lineTo(data.x, data.y);
+          ctx.stroke();
+        }
+      });
+
+      // **Listen for Color Change**
+      socket.on('colorChange', (data) => {
+        ctx.strokeStyle = data.color;
+      });
+
+      // **Listen for Line Width Change**
+      socket.on('lineWidthChange', (data) => {
+        ctx.lineWidth = data.lineWidth;
+      });
+
+      // **Listen for Clear Canvas**
+      socket.on('clearCanvas', () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      });
+    
+
+      // Save Drawing
+      document.getElementById('saveButton')?.addEventListener('click', () => {
+        const imageURL = canvas.toDataURL();
+        const link = document.createElement('a');
+        link.href = imageURL;
+        link.download = 'whiteboard.png';
+        link.click();
+      });
+
+      // Listen for Meeting End Event (Redirect Everyone)
+      socket.on('endMeeting', () => {
+      alert("The meeting has been ended by the Admin.");
+      window.location.href = "/";  // 🔥 Redirect both Admin & Participants
+    });
+
+    });
+  </script>
+</head>
+<body>
+
+  
+
+
+<% if (isAdmin) { %>
+    <h1>Meeting ID: <%= meetingId %> </h1>
+    <h2>You are the Admin. You can draw on the whiteboard.</h2>
+    <div class="controls">
+      <label for="colorPicker">Pick Color: </label> 
+      <input type="color" id="colorPicker" value="#000000"> 
+      <label for="lineWidth">Line Width: </label>
+      <input type="number" id="lineWidth" value="2" min="1" max="10">
+    </div>
+    <button id="clearButton">Clear Whiteboard</button> <br>
+    <button id="saveButton">Save Whiteboard</button> <br>
+    <button id="endButton">End Meeting</button> <br>
+    <canvas id="canvas" width="800" height="600"></canvas>
+   
+  <% } else { %>
+    <h2>You are a participant. You can only view the whiteboard.</h2>
+    <canvas id="canvas" width="800" height="600"></canvas>
+<% } %>
+
+</body>
+</html>
+
