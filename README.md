@@ -51,17 +51,17 @@ The app will run on http://localhost:10000.
 
 ## Usage Guide
 ### Creating a Meeting
-  .Click "Create a Meeting" on the home page.
-  .Share the meeting code with participants.
+  Click "Create a Meeting" on the home page.
+  Share the meeting code with participants.
 ### Joining a Meeting
-  .Enter a valid meeting code in the "Join Meeting" section.
-  .You will be redirected to the whiteboard as a viewer.
+  Enter a valid meeting code in the "Join Meeting" section.
+  You will be redirected to the whiteboard as a viewer.
 ### Whiteboard Controls (Admin Only)
-  .Draw using the mouse.
-  .Change color and line width using the toolbar.
-  .Click Clear to erase the whiteboard.
-  .Click Save to download the whiteboard as an image.
-  .Click End Meeting to close the session.
+  Draw using the mouse.
+  Change color and line width using the toolbar.
+  Click Clear to erase the whiteboard.
+  Click Save to download the whiteboard as an image.
+  Click End Meeting to close the session.
   
 ## Future Improvements
 🚀 Add audio/video support for meetings
